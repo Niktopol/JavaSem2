@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("I`m working");
+        /*
         Scanner scanner = new Scanner(System.in);
         int task;
         while (true){
@@ -95,7 +97,10 @@ public class Main {
                     Task8.testMemento();
                     Task8.testObserver();
                 }
+                default -> {
+                    return;
+                }
             }
-        }
+        }*/
     }
 }

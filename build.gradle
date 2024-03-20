@@ -2,6 +2,19 @@ plugins {
     id 'java'
 }
 
+group = 'com.sem2'
+version = '1.0-SNAPSHOT'
+
+/*
+tasks.register('buildImage', Exec) {
+    def copyjar = "xcopy /Y build\\libs\\${rootProject.name}-${version}.jar docker"
+    def cmd = 'docker build -t javaimage -f Dockerfile.txt .'
+
+    //println(copyjar)
+    commandLine  = copyjar.split().toList()
+    //commandLine  = cmd.split().toList()
+}
+*/
 jar {
     manifest {
         attributes(
@@ -10,8 +23,31 @@ jar {
     }
 }
 
-group = 'com.sem2'
-version = '1.0-SNAPSHOT'
+
+tasks.register('runContainer', Exec) {
+    def cmd = 'docker run -i --name javacont javaimage'
+    commandLine  = cmd.split().toList()
+}
+
+tasks.register('buildImage', Exec) {
+    def cmd = 'docker build --build-arg WORK_DIR=docker -t javaimage -f docker/Dockerfile.txt .'
+    commandLine  = cmd.split().toList()
+}
+
+tasks.register('copyFiles', Copy) {
+    from 'build/libs'
+    into 'docker'
+    include "${rootProject.name}-${version}.jar"
+}
+
+jar.finalizedBy(copyFiles)
+
+copyFiles.finalizedBy(buildImage)
+
+buildImage.finalizedBy(runContainer)
+
+
+
 
 repositories {
     mavenCentral()
