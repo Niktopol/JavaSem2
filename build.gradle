@@ -5,27 +5,17 @@ plugins {
 group = 'com.sem2'
 version = '1.0-SNAPSHOT'
 
-/*
-tasks.register('buildImage', Exec) {
-    def copyjar = "xcopy /Y build\\libs\\${rootProject.name}-${version}.jar docker"
-    def cmd = 'docker build -t javaimage -f Dockerfile.txt .'
-
-    //println(copyjar)
-    commandLine  = copyjar.split().toList()
-    //commandLine  = cmd.split().toList()
-}
-*/
 jar {
     manifest {
         attributes(
-                'Main-Class': 'com.sem2.Main'
+                'Main-Class': 'com.sem2.Task9'
         )
     }
 }
 
 
 tasks.register('runContainer', Exec) {
-    def cmd = 'docker run -i --name javacont javaimage'
+    def cmd = 'docker run --name javacont javaimage'
     commandLine  = cmd.split().toList()
 }
 
