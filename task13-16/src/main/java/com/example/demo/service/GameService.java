@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.DTO.GameDTO;
 import com.example.demo.model.Game;
+import com.example.demo.model.GameAuthor;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,7 +25,11 @@ public class GameService {
     }
 
     public boolean addGame(GameDTO gameDTO){
-        Game game = new Game(gameDTO.getName(), gameDTO.getCreationDate());
+        GameAuthor author = session.createQuery("select u from GameAuthor u where u.id = :id", GameAuthor.class).setParameter("id", gameDTO.getAuthorId()).getSingleResult();
+        if (author == null){
+            return false;
+        }
+        Game game = new Game(gameDTO.getName(), gameDTO.getCreationDate(), author);
         var transaction = session.beginTransaction();
         if (session.createQuery("select u from Game u where u.name = \""+game.getName()+"\"", Game.class).getResultList().isEmpty()){
             session.persist(game);
