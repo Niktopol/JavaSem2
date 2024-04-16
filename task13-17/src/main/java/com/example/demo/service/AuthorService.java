@@ -1,13 +1,17 @@
 package com.example.demo.service;
 
 import com.example.demo.model.DTO.GameAuthorDTO;
-import com.example.demo.model.Game;
 import com.example.demo.model.GameAuthor;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -53,5 +57,27 @@ public class AuthorService {
 
     public List<GameAuthor> getGamedevs(){
         return session.createQuery("select u from GameAuthor u", GameAuthor.class).getResultList();
+    }
+
+    public List<GameAuthor> getGamedevByNickname(String nickname) {
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<GameAuthor> criteriaQuery = criteriaBuilder.createQuery(GameAuthor.class);
+        Root<GameAuthor> root = criteriaQuery.from(GameAuthor.class);
+
+        Predicate predicate = criteriaBuilder.equal(root.get("nickname"), nickname);
+        criteriaQuery.where(predicate);
+
+        return session.createQuery(criteriaQuery).getResultList();
+    }
+
+    public List<GameAuthor> getGamedevsByBirthDate(Date birthDate) {
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<GameAuthor> criteriaQuery = criteriaBuilder.createQuery(GameAuthor.class);
+        Root<GameAuthor> root = criteriaQuery.from(GameAuthor.class);
+
+        Predicate predicate = criteriaBuilder.equal(root.get("birthDate"), birthDate);
+        criteriaQuery.where(predicate);
+
+        return session.createQuery(criteriaQuery).getResultList();
     }
 }

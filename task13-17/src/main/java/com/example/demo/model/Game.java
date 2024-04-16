@@ -1,10 +1,14 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
+@Getter
 @Entity
 @Table(name = "games")
 public class Game {
@@ -12,43 +16,19 @@ public class Game {
     @SequenceGenerator(name = "games_seq", sequenceName = "games_sequence", allocationSize = 1)
     @GeneratedValue(generator = "games_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Setter
     @Column(name = "name")
     private String name;
 
+    @Setter
     @Column(name = "creationdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date creationDate;
 
+    @Setter
     @JsonIgnoreProperties("games")
     @ManyToOne
     private GameAuthor author;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public GameAuthor getAuthor() {
-        return author;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public void setAuthor(GameAuthor author) {
-        this.author = author;
-    }
 
     public Game(){}
 

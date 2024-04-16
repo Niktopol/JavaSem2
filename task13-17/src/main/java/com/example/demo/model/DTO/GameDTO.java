@@ -1,12 +1,14 @@
 package com.example.demo.model.DTO;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+@Getter
 public class GameDTO {
     private String name;
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date creationDate;
     private long authorId;
 
@@ -14,17 +16,5 @@ public class GameDTO {
         this.name = name;
         this.creationDate = creationDate;
         this.authorId = authorId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public long getAuthorId() {
-        return authorId;
     }
 }

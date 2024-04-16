@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.DTO.GameAuthorDTO;
-import com.example.demo.model.DTO.GameDTO;
-import com.example.demo.model.Game;
 import com.example.demo.model.GameAuthor;
 import com.example.demo.service.AuthorService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,5 +38,15 @@ public class AuthorController {
     @GetMapping("/show")
     public List<GameAuthor> showGamedevs(){
         return authorService.getGamedevs();
+    }
+
+    @GetMapping("/showbynick/{nickname}")
+    public List<GameAuthor> showGamedevByNickname(@PathVariable String nickname){
+        return authorService.getGamedevByNickname(nickname);
+    }
+
+    @GetMapping("/showbydate/{date}")
+    public List<GameAuthor> showGamedevsByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
+        return authorService.getGamedevsByBirthDate(date);
     }
 }

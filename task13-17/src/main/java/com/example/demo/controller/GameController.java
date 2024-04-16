@@ -3,8 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.model.DTO.GameDTO;
 import com.example.demo.model.Game;
 import com.example.demo.service.GameService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -37,5 +39,15 @@ public class GameController {
     @GetMapping("/show")
     public List<Game> showGames(){
         return gameService.getGames();
+    }
+
+    @GetMapping("/showbyname/{name}")
+    public List<Game> showGameByName(@PathVariable String name){
+        return gameService.getGameByName(name);
+    }
+
+    @GetMapping("/showbydate/{date}")
+    public List<Game> showGameByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
+        return gameService.getGamesByCreationDate(date);
     }
 }

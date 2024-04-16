@@ -4,10 +4,15 @@ import com.example.demo.model.DTO.GameDTO;
 import com.example.demo.model.Game;
 import com.example.demo.model.GameAuthor;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -56,5 +61,27 @@ public class GameService {
 
     public List<Game> getGames(){
         return session.createQuery("select u from Game u", Game.class).getResultList();
+    }
+
+    public List<Game> getGameByName(String name) {
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Game> criteriaQuery = criteriaBuilder.createQuery(Game.class);
+        Root<Game> root = criteriaQuery.from(Game.class);
+
+        Predicate predicate = criteriaBuilder.equal(root.get("name"), name);
+        criteriaQuery.where(predicate);
+
+        return session.createQuery(criteriaQuery).getResultList();
+    }
+
+    public List<Game> getGamesByCreationDate(Date creationDate) {
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Game> criteriaQuery = criteriaBuilder.createQuery(Game.class);
+        Root<Game> root = criteriaQuery.from(Game.class);
+
+        Predicate predicate = criteriaBuilder.equal(root.get("creationDate"), creationDate);
+        criteriaQuery.where(predicate);
+
+        return session.createQuery(criteriaQuery).getResultList();
     }
 }
